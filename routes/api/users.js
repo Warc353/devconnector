@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
-//const gravatar = require("gravatar");
+//const gravatar = require("gravatar"); I did not install gravatar and had to comment all related code to it due to it throughing an error in node and the connection to the database **This took me about two days to debug the issue, so I war pretty excited about figuring this out
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const keys = require("../../config/keys");
 
 // Load User model
 const User = require("../../models/User");
@@ -43,6 +45,47 @@ router.post("/register", (req, res) => {
         });
       });
     }
+  });
+});
+
+//@route GET api/users/login
+//@desc Login User / Returning JWT token
+//@access Public
+router.post("/login", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  //Find user email
+  User.findOne({ email }).then(user => {
+    //Check for user
+    if (!user) {
+      return res.status(404).json({ email: "User not found" });
+    }
+
+    //Check Password
+    bcrypt.compare(password, user.password).then(isMatch => {
+      if (isMatch) {
+        //User Matched
+
+        const payload = { id: user.id, name: user.name }; //Create JWT Payload //avatar: user.avatar
+
+        //Sign Token
+        jwt.sign(
+          payload,
+          keys.secretOrKey,
+          { expiresIn: 3600 },
+          (err, token) => {
+            res.json({
+              success: true,
+              token: "Bearer " + token
+            });
+          }
+        );
+        // res.json({ msg: "Success" }); This piece of code is good to test if the login is working properly
+      } else {
+        return res.status(400).json({ password: "Password incorrect" });
+      }
+    });
   });
 });
 
