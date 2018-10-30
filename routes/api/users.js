@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-//const gravatar = require("gravatar"); I did not install gravatar and had to comment all related code to it due to it throughing an error in node and the connection to the database **This took me about two days to debug the issue, so I war pretty excited about figuring this out
+//const gravatar = require("gravatar"); I did not install gravatar and had to comment all related code to it due to it throwing an error in node and the connection to the database **This took me about two days to debug the issue, so I was pretty excited about figuring this out
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");

@@ -38,13 +38,13 @@ const PostSchema = new Schema({
       name: {
         type: String
       },
-      /*avatar: {
-        type: Sting
-      } */
       date: {
         type: Date,
         def: Date.now
       }
+      /*avatar: {
+        type: Sting
+      } */
     }
   ],
   date: {
